@@ -1,3 +1,4 @@
 module.exports={
-    info:require('./infocontroller')
+    info:require('./infocontroller'),
+    usercontroller:require('./usercontroller')
 }
