@@ -1,8 +1,11 @@
 const jwt = require('jsonwebtoken')
-async function token(user_email){
+const {server} = require('../../config/index');
+// const { data } = require('./success_response');
+async function token(data1){
     try {
-        const token = await jwt.sign({email:user_email},'12')
-        console.log(token);
+        
+        const token = await jwt.sign({data:data1},server.SECERT_KEY)
+        
         return token
     } catch (error) {
         throw error

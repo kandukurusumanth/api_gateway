@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const userservice = new userrepo();
 const jwt = require('jsonwebtoken')
 const {createjwttoken} = require('../utils/common/index')
-console.log(createjwttoken);
+const {verfiy} = require('../utils/common/index')
 async function createuser(data){
     try {
         const user = await userservice.create(data)
@@ -20,7 +20,12 @@ async function autheciate(data){
             throw new Error('you have entered the wrong email')
         }
         if(bcrypt.compareSync(data.password,user.password)){
-            return createjwttoken(user.email);
+            let token= await createjwttoken(data);
+           
+            
+            return isathunciated(token);
+            
+
         }
         else {
             throw new Error('you have entered the password  wrong check once');
@@ -30,7 +35,16 @@ async function autheciate(data){
         
     }
 }
-
+async function isathunciated(token){
+    try {
+        if(!token) throw new Error('MISSING JWT TOKEN');
+        else {
+            return verfiy(token)
+        }
+    } catch (error) {
+        throw error
+    }
+}
 module.exports={
     createuser,
     autheciate
