@@ -4,9 +4,10 @@ const {server} =require('./config/index');
 const  { rateLimit } =require('express-rate-limit'); 
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const api = require('./router/index')
+
 const limiter = rateLimit({
 	windowMs: 1 * 60 * 1000, 
-	limit: 4, 
+	limit: 100, 
 	message:"to many request try again" 
 })
 
@@ -21,6 +22,4 @@ app.use('/bookingservice',createProxyMiddleware({ target: server.BOOKING_PORT, c
 
 app.listen(server.PORT ,()=>{
     console.log(`listening to port : ${server.PORT}`);
-    
-
 })

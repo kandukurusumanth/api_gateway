@@ -45,8 +45,48 @@ async function autheciateusercontroller(req,res){
         throw error
     }
 }
+async function giverolecontoller(req,res){
+    
+    try {
+        const user = await userservice.giverole({
+            role:req.body.role,
+            id:req.body.id
+        })
+        
+        success.data=user
+        return res.json({
+            success
+        })
+    } catch (error) {
+        errors.error=error.message;
+        console.log(error);
+        return  res.json({
+            errors
+        })
+       
+        throw error
+    }
+}
+async function getusercontrollerbyid(req,res){
+    try {
+        const user = await userservice.getuserbyid({
+            id:req.params.id
+        })
+        return res.json({
+            data:user
+        })
+    } catch (error) {
+        console.log(error);
+        return res.json({
+            error
+        })
+        
+    }
 
+}
 module.exports={
     createusercontroller,
-    autheciateusercontroller
+    autheciateusercontroller,
+    giverolecontoller,
+    getusercontrollerbyid
 }

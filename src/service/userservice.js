@@ -4,9 +4,17 @@ const userservice = new userrepo();
 const jwt = require('jsonwebtoken')
 const {createjwttoken} = require('../utils/common/index')
 const {verfiy} = require('../utils/common/index')
+const {rolerepo} = require('../repo/index');
+const roleservice = new rolerepo();
+const {UserRole} = require('../models/index')
 async function createuser(data){
     try {
-        const user = await userservice.create(data)
+        const user = await userservice.create(data);
+        const role = await roleservice.getrole('customer');
+        
+       
+        await user.addRoles(role)
+        
         return user
     } catch (error) {
         throw error
@@ -45,7 +53,32 @@ async function isathunciated(token){
         throw error
     }
 }
+async function giverole(data){
+    try {
+        const user = await userservice.get(data.id);
+        const role = await roleservice.getrole(data.role);
+        if(role==='admin') {
+            if(!user) throw new Error('no user found');
+            return  await user.addRoles(role)
+        }
+        else throw new Error ('you are not a admin');
+    } catch (error) {
+        throw error
+    }
+}
+async function getuserbyid(data){
+    try {
+        const user = await userservice.get(data.id);
+        if(!user) throw new Error ('you need to sigup');
+        return user
+    } catch (error) {
+        throw error
+    }
+
+}
 module.exports={
     createuser,
-    autheciate
+    autheciate,
+    giverole,
+    getuserbyid
 }
